@@ -51,16 +51,19 @@ int prune_line(char to[], char from[], int fromlen)
 	while (from[j] != '\0') {
 		if (from[j] != ' ' && from[j] != '\t') {
 			to[i] = from[j];
-			++i;
 			++j;
 		} else {
-			int k = j;
-			while (from[k] == ' ' && from[k] == '\t')
+			int k = j + 1;
+
+			while (from[k] == ' ' || from[k] == '\t')
 				++k;
 
-			if (from[k] == '\n')
+			if (k > j + 1)
 				j = k;
+			else
+				++j;
 		}
+		++i;
 	}
 
 	to[i] = '\0';
