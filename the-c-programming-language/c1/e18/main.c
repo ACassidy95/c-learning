@@ -44,29 +44,24 @@ int get_line(char line[], int maxline)
 
 int prune_line(char to[], char from[], int fromlen)
 {
-	int i, j;
+	int i,j;
 
 	i = 0;
 	j = 0;
-	while (from[j] != '\0') {
-		if (from[j] != ' ' && from[j] != '\t') {
-			to[i] = from[j];
-			++j;
-		} else {
+	while((to[i] = from[j]) != '\0') {
+		if (from[j] == ' ' || from[j] == '\t') {
 			int k = j + 1;
-
-			while (from[k] == ' ' || from[k] == '\t')
+			while (from[k] == ' ' || from[k] == '\t' && from[k] != '\n')
 				++k;
-
 			if (k > j + 1)
 				j = k;
 			else
 				++j;
+		} else {
+			++j;
 		}
 		++i;
 	}
-
-	to[i] = '\0';
 
 	return i;
 }
