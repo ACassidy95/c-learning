@@ -6,20 +6,18 @@
 #define MAXLINE 1024
 
 int get_line(char line[], int maxline);
-int prune_line(char to[], char from[], int fromlen);
+int prune_line(char line[], int len);
+void swap(char line[], int i, int j);
 
 int main()
 {
 	int	len, plen;
 	char	line[MAXLINE];
-	char	pline[MAXLINE];
 
 	while ((len = get_line(line, MAXLINE)) > 0) {
-		//plen = prune_line(pline, line, len);
-		//printf("%5d- %s\n%5d- %s\n", len, line, plen, pline);
-		printf("%5d- %s", len, line);
-		plen = prune_line(pline, line, len);
-		printf("%5d- %s\n", plen, pline);
+		printf("Input: %5d- %s", len, line);
+		plen = prune_line(line, len);
+		printf("Prune: %5d- %s\n", plen, line);
 	}
 
 	return 0;
@@ -42,26 +40,36 @@ int get_line(char line[], int maxline)
 	return i;
 }
 
-int prune_line(char to[], char from[], int fromlen)
+int prune_line(char line[], int len)
 {
-	int i,j;
+	int i, j;
 
 	i = 0;
 	j = 0;
-	while((to[i] = from[j]) != '\0') {
-		if (from[j] == ' ' || from[j] == '\t') {
-			int k = j + 1;
-			while (from[k] == ' ' || from[k] == '\t' && from[k] != '\n')
-				++k;
-			if (k > j + 1)
-				j = k;
-			else
+	while (line[i] != '\0') {
+		if (line[i] == ' ' || line[i] == '\t') {
+			while (line[j] == ' ' || line[j] == '\t')
 				++j;
+
+			if (line[j] != '\n' && line[j] != '\0')
+				i = j;
+			else
+				swap(line, i, j);
+
 		} else {
+			++i;
 			++j;
 		}
-		++i;
 	}
 
 	return i;
+}
+
+void swap(char line[], int i, int j)
+{
+	char c;
+
+	c = line[i];
+	line[i] = line[j];
+	line[j] = c;
 }
