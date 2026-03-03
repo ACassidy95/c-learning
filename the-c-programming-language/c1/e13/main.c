@@ -76,12 +76,15 @@ int main()
 		printf("\n");
 	}
 
-	printf("%10d", 1);
+	printf("%10c", '_');
+	for (int i = 2; i< FREQ_RANGE; ++i)
+		if (wls[i] >= wls[minpos])
+			printf("%3c", '_');
+	printf("\n%10d", 1);
 	for (int i = 2; i < FREQ_RANGE; ++i)
 		if (wls[i] >= wls[minpos])
 			printf("%3d", i);
 
-	printf("\n\nMax: %5d Min: %5d Mode: %5d Display Range: %5d\n"
-	       ,wls[maxpos], wls[minpos], maxpos, dr);
-	printf("ymax: %5f, ymin: %5f, ystep: %5f\n", ymax, ymin, ystep);
+	printf("\n\nMax: %5d Min: %5d Mode: %5d Display Range: %5d Y-Step: %5f\n"
+	       ,wls[maxpos], wls[minpos], maxpos, dr, ystep);
 }
