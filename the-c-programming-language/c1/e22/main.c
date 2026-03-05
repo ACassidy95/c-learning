@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 #define MAXLINE		1024
-#define MAXWIDTH	50
+#define MAXWIDTH	20
 
 int get_line(char line[], int maxline);
 void fold_line(char folded[], char line[], int maxwidth);
@@ -42,27 +42,42 @@ int get_line(char line[], int maxline) {
 }
 
 void fold_line(char folded[], char line[], int maxwidth) {
-	int i, j;
-	int bpos;
+	int i, j, diff;
+	int bpos, col;
 
-	i = 0;
-	j = 0;
-	bpos = -1;
+	i	= 0;
+	j	= 0;
+	diff	= 0;
+	col	= 0;
+	bpos	= -1;
 	while (line[i] != '\0') {
-		folded[i] = line[i];
-
 		if (line[i] == ' ' || line[i] == '\t')
 			bpos = i;
 
-		if (j > 0 && j % maxwidth == 0) {
-			folded[bpos] = '\n';
-			j = i - bpos;
+		if (col > 0 && col % maxwidth == 0) {
+			// If no blank has been seen since the last break was
+			// inserted, insert a hyphen and newline at the
+			// subsequent j (folded line) index
+			if (i - col >= bpos) {
+				folded[j] = '-';
+				++j;
+				folded[j] = '\n';
+				++j;
+
+				col = 1;
+				diff = j - i;
+			} else {
+				folded[bpos + diff] = '\n';
+				col = i - bpos;
+			}
 		} else {
-			++j;
+			++col;
 		}
 
+		folded[j] = line[i];
+		++j;
 		++i;
 	}
 
-	folded[i] = '\0';
+	folded[j] = '\0';
 }
