@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 #define MAXLINE		1024
-#define MAXWIDTH	30
+#define MAXWIDTH	50
 
 int get_line(char line[], int maxline);
 void fold_line(char folded[], char line[], int maxwidth);
@@ -18,13 +18,8 @@ int main()
 
 	i = 0;
 	while ((len = get_line(line, MAXLINE)) > 0) {
-		if (len > MAXWIDTH) {
-			fold_line(fline, line, MAXWIDTH);
-			printf("%s", fline);
-		} else {
-			printf("%s", line);
-		}
-		printf("\n");
+		fold_line(fline, line, MAXWIDTH);
+		printf("%s", fline);
 		++i;
 	}
 
