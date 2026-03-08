@@ -12,43 +12,40 @@
 
 int main()
 {
-	int state, lpos;
-	char c, peek; // An in-line comment
+	// Flag if inside a multiline comment
+	int	ml_cmt;
 
-	state = 0;
-	lpos = 0;
+	// c - current input character
+	// peek - inspect next input character
+	// discard - unneeded input characters
+	char	c, peek, discard;
+
+	ml_cmt = 0;
 	while((c = getchar()) != EOF) {
 		if (c == '/') {
 			peek = getchar();
 
 			if (peek == '*') {
-				if (state == 0)
-					state = 1;
+				if (ml_cmt == 0)
+					ml_cmt = 1;
 
-				while (state == 1) {
-					while ((c = getchar()) != '*')
+				while (ml_cmt == 1) {
+					while ((discard = getchar()) != '*')
 						;
 					peek = getchar();
 
 					if (peek == '/')
-						state = 0;
+						ml_cmt = 0;
 				}
 			} else if (peek == '/') {
-				while ((c = getchar()) != '\n')
+				while ((discard = getchar()) != '\n')
 					;
-				if (lpos > 0) {
-					putchar(c);
-					++lpos;
-				}
 			} else {
 				putchar(c);
 				putchar(peek);
-				lpos = lpos + 2;
 			}
 		} else {
-			if (!(c == '\n' && lpos == 0))
 				putchar(c);
-			lpos++;
 		}
 	}
 }
