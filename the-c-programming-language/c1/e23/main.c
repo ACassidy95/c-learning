@@ -10,32 +10,30 @@
 
 #include <stdio.h>
 
-#define MAXLINE	1024
-
 int main()
 {
-	int incmt, lpos;
-	char c, lka; // An in-line comment
+	int state, lpos;
+	char c, peek; // An in-line comment
 
-	incmt = 0;
+	state = 0;
 	lpos = 0;
 	while((c = getchar()) != EOF) {
 		if (c == '/') {
-			lka = getchar();
+			peek = getchar();
 
-			if (lka == '*') {
-				if (incmt == 0)
-					incmt = 1;
+			if (peek == '*') {
+				if (state == 0)
+					state = 1;
 
-				while (incmt == 1) {
+				while (state == 1) {
 					while ((c = getchar()) != '*')
 						;
-					lka = getchar();
+					peek = getchar();
 
-					if (lka == '/')
-						incmt = 0;
+					if (peek == '/')
+						state = 0;
 				}
-			} else if (lka == '/') {
+			} else if (peek == '/') {
 				while ((c = getchar()) != '\n')
 					;
 				if (lpos > 0) {
@@ -44,7 +42,7 @@ int main()
 				}
 			} else {
 				putchar(c);
-				putchar(lka);
+				putchar(peek);
 				lpos = lpos + 2;
 			}
 		} else {
