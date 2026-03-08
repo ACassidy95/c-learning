@@ -122,11 +122,30 @@ signed char calculate_signed_char_limit(int limit, unsigned char ucmax)
 	signed char sclim;
 
 	sclim = ucmax / 2;
-	if (limit == LIM_MIN) {
+	if (limit == LIM_MIN)
 		sclim = (sclim * -1) - 1;
-	} else if (limit == LIM_MAX) {
-		sclim = sclim;
-	}
 
 	return sclim;
+}
+
+signed short calculate_signed_short_limit(int limit, unsigned short usmax)
+{
+	signed short sslim;
+
+	sslim = usmax / 2;
+	if (limit == LIM_MIN)
+		sslim = (sslim * -1) - 1;
+
+	return sslim;
+}
+
+signed int calculate_signed_int_limit(int limit, unsigned int uimax)
+{
+	signed int silim;
+
+	silim = uimax / 2;
+	if (limit == LIM_MIN)
+		silim = (silim * -1) - 1;
+
+	return silim;
 }
