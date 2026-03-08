@@ -149,3 +149,14 @@ signed int calculate_signed_int_limit(int limit, unsigned int uimax)
 
 	return silim;
 }
+
+signed long calculate_signed_long_limit(int limit, unsigned long ulmax)
+{
+	signed long sllim;
+
+	sllim = ulmax / 2;
+	if (limit == LIM_MIN)
+		sllim = (sllim * -1) - 1;
+
+	return sllim;
+}
