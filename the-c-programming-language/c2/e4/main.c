@@ -30,9 +30,24 @@ int get_line(char s[], int maxline)
 	for (i = 0; i < maxline - 1 && (c = getchar()) != EOF && c != '\n'; ++i)
 		s[i] = c;
 
-	if (c == '\n')
-		s[i++] = c;
-
-	s[i] = '\0';
+	// Discard newline as it serves no purpose in this program
+	s[i++] = '\0';
 	return i;
+}
+
+void squeeze(char s[], char t[])
+{
+	int i, j, k;
+
+	k = 0;
+	for (i = 0; s[i] != '\0'; ++i) {
+		for (j = 0; s[i] != t[j] && t[j] != '\0'; ++j)
+			;
+
+		if (t[j] == '\0') {
+			s[k++] = s[i];
+		}
+	}
+
+	s[k] = '\0';
 }
