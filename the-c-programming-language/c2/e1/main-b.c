@@ -48,7 +48,7 @@ int main()
 	}
 
 	husmax = USHRT_MAX;
-	usmax = calculate_signed_short_max();
+	usmax = calculate_unsigned_short_max();
 
 	if (usmax == husmax)
 		printf("Unsigned short max: %+5u\n", usmax);
@@ -57,6 +57,43 @@ int main()
 	hssmax = SHRT_MAX;
 	ssmin = calculate_signed_short_limit(LIM_MIN, usmax);
 	ssmax = calculate_signed_short_limit(LIM_MAX, usmax);
+
+	if (ssmin == hssmin && ssmax == hssmax) {
+		printf("Signed short min: %+5d\n", scmin);
+		printf("Signef short max: %+5d\n", scmax);
+	}
+
+	huimax = UINT_MAX;
+	uimax = calculate_unsigned_int_max();
+
+	if (uimax == huimax)
+		printf("Unsigned int max: %+5u\n", uimax);
+
+	hsimin = INT_MIN;
+	hsimax = INT_MAX;
+	simin = calculate_signed_int_limit(LIM_MIN, uimax);
+	simax = calculate_signed_int_limit(LIM_MAX, uimax);
+
+	if (simin == hsimin && simax == hsimax) {
+		printf("Signed int min: %+5d\n", simin);
+		printf("Signed int max: %+5d\n", simax);
+	}
+
+	hulmax = ULONG_MAX;
+	ulmax = calculate_unsigned_long_max();
+
+	if (ulmax == hulmax)
+		printf("Unsigned long max: %+5lu\n", ulmax);
+
+	hslmin = LONG_MIN;
+	hslmax = LONG_MAX;
+	slmin = calculate_signed_long_limit(LIM_MIN, ulmax);
+	slmax = calculate_signed_long_limit(LIM_MAX, ulmax);
+
+	if (slmin == hslmin && slmax == hslmax) {
+		printf("Signed long min: %+5lu\n", slmin);
+		printf("Signed long max: %+5lu\n", slmax);
+	}
 
 	return 0;
 }
@@ -68,7 +105,10 @@ unsigned char calculate_unsigned_char_max()
 	uc = 0;
 	ucn = uc + 1;
 	while (uc < ucn) {
+		uc = uc * 2;
 		++uc;
+
+		ucn = ucn * 2;
 		++ucn;
 	}
 
@@ -82,7 +122,10 @@ unsigned short calculate_unsigned_short_max()
 	us = 0;
 	usn = us + 1;
 	while (us < usn) {
+		us = us * 2;
 		++us;
+
+		usn = usn * 2;
 		++usn;
 	}
 
@@ -96,7 +139,10 @@ unsigned int calculate_unsigned_int_max()
 	ui = 0;
 	uin = ui + 1;
 	while (ui < uin) {
+		ui = ui * 2;
 		++ui;
+
+		uin = uin * 2;
 		++uin;
 	}
 
@@ -110,7 +156,10 @@ unsigned long calculate_unsigned_long_max()
 	ul = 0;
 	uln = ul + 1;
 	while (ul < uln) {
+		ul = ul * 2;
 		++ul;
+
+		uln = uln * 2;
 		++uln;
 	}
 
