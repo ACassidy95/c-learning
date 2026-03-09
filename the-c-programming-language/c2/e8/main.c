@@ -69,18 +69,19 @@ int rightrot(int x, int n)
 
 	// Find max 100... bit sequence for int type
 	mx = 1;
-	mxn = mx << 1;
-	while (mx < mxn) {
-		mx << 1;
-		mxn << 1;
+	mxn = x;
+	while (mxn > 1) {
+		mx = mx << 1;
+		mxn = mxn >> 1;
 	}
 
+	xrot = x;
 	for (i = 0; i < n; ++i) {
-		if (x % 2) {
-			xrot = x >> 1;
+		if (xrot % 2) {
+			xrot = xrot >> 1;
+			xrot |= mx;
 		} else {
-			xrot = x >> 1;
-			xrot &= mx;
+			xrot = xrot >> 1;
 		}
 	}
 
