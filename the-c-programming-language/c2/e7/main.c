@@ -12,6 +12,41 @@ int invert(int x, int p, int n);
 
 int main()
 {
+	int	lx, ln, lp, x, n, p, res;
+	char	sx[MAXBUF], sn[PARAMBUF], sp[PARAMBUF];
+
+	printf("Input x value: ");
+	lx = get_num(sx, MAXBUF);
+
+	printf("Input x bitposition: ");
+	lp = get_num(sp, PARAMBUF);
+
+	printf("Input bit width n: ");
+	ln = get_num(sn, PARAMBUF);
+
+	x = atoi(sx);
+	p = atoi(sp);
+	n = atoi(sn);
+
+	while (lx > 0 && lp > 0 && ln > 0) {
+		res = invert(x, p, n);
+
+		printf("X:%12d\np:%12d\nn:%12d\nres:%10d\n", x, p, n);
+
+		printf("Input x value: ");
+		lx = get_num(sx, MAXBUF);
+
+		printf("Input x bitposition: ");
+		lp = get_num(sp, PARAMBUF);
+
+		printf("Input bit width n: ");
+		ln = get_num(sn, PARAMBUF);
+
+		x = atoi(sx);
+		p = atoi(sp);
+		n = atoi(sn);
+	}
+
 	return 0;
 }
 
@@ -23,7 +58,7 @@ int get_num(char s[], int max)
 		s[i] = c;
 
 	// Discard any newline as irrelevant to program
-	c[i] = '\0';
+	s[i] = '\0';
 	return i;
 }
 
