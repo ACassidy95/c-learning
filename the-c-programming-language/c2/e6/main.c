@@ -8,6 +8,7 @@
 
 int setbits(int x, int n, int p, int y);
 int get_num(char s[], int max);
+int atoi(char s[]);
 
 int main()
 {
@@ -25,4 +26,27 @@ int setbits(int x, int n, int p, int y)
 	sry = ry << (p - n);
 
 	return x | sry;
+}
+
+int get_num(char s[], int max)
+{
+	int c, i;
+
+	for (i = 0; i < max - 1 && (c = getchar()) != EOF && c != '\n'; ++i)
+		s[i] = c;
+
+	// Discard any newline
+	s[i] = '\0';
+	return i;
+}
+
+int atoi(char s[])
+{
+	int i, n;
+
+	n = 0;
+	for (i = 0; s[i] != '\0'; ++i)
+		n = 10 * n + (s[i] - '0');
+
+	return n;
 }
