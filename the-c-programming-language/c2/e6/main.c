@@ -4,7 +4,25 @@
 
 #include <stdio.h>
 
+#define MAXBUF	128
+
+int setbits(int x, int n, int p, int y);
+int get_num(char s[], int max);
+
 int main()
 {
 	return 0;
+}
+
+int setbits(int x, int n, int p, int y)
+{
+	int ry, sry;
+
+	// isolate rightmost n bits of y
+	ry = y & ~(~0 << n);
+
+	// shift isolated y bits to align with position p of x
+	sry = ry << (p - n);
+
+	return x | sry;
 }
