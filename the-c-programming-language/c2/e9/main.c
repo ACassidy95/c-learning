@@ -14,17 +14,17 @@ int bitcount_tc(unsigned x);
 int main()
 {
 	unsigned int	lx, x;
-	int		bco, bcf;
+	int		bco, bct;
 	char		sx[MAXBUF];
 
 	printf("Enter X value: ");
 	while ((lx = get_num(sx, MAXBUF)) > 0) {
 		x = atoi(sx);
 		bco = bitcount_oc(x);
-		bcf = bitcount_tc(x);
+		bct = bitcount_tc(x);
 
-		printf("Original Bitcount value: %d\n", bco);
-		printf("Fast Bitcount value: %d\n", bcf);
+		printf("OC Bitcount value: %5d\n", bco);
+		printf("TC Bitcount value: %5d\n", bct);
 
 		printf("Enter X value: ");
 	}
@@ -55,6 +55,9 @@ int atoi(char s[])
 	return n;
 }
 
+// One's Complement version of bitcount. Slower than Two's Complement since it
+// requires clearing all bits in x up to the MSB regardless of if they are set
+// or not. 
 int bitcount_oc(unsigned x)
 {
 	int b;
@@ -66,6 +69,9 @@ int bitcount_oc(unsigned x)
 	return b;
 }
 
+// Two's Complement version of bitconut. Faster than One's Complement since it
+// automatically clears only the rightmost set bit as the lowest n bits of x-1
+// are inverse of the lowest n bits of x.
 int bitcount_tc(unsigned x)
 {
 	int b;
