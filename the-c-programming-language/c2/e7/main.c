@@ -31,7 +31,7 @@ int main()
 	while (lx > 0 && lp > 0 && ln > 0) {
 		res = invert(x, p, n);
 
-		printf("X:%12d\np:%12d\nn:%12d\nres:%10d\n", x, p, n);
+		printf("X:%12d\np:%12d\nn:%12d\nres:%10d\n", x, p, n, res);
 
 		printf("Input x value: ");
 		lx = get_num(sx, MAXBUF);
@@ -67,8 +67,21 @@ int atoi(char s[])
 	int i, n;
 
 	n = 0;
-	for (i = 0; s[i] != '\0'; ++n)
+	for (i = 0; s[i] != '\0'; ++i)
 		n = n * 10 + (s[i] - '0');
 
 	return n;
+}
+
+int invert(int x, int p, int n)
+{
+	int xb, xninv;
+
+	// Isolate n bits of x, then shift up to occupy positions p,...,p-(n-1)
+	xb = ~(~0 << n);
+	xb = xb << (p - n);
+
+	xninv = x ^ xb;
+
+	return xninv;
 }
