@@ -57,7 +57,7 @@ int atoi(char s[])
 
 // One's Complement version of bitcount. Slower than Two's Complement since it
 // requires clearing all bits in x up to the MSB regardless of if they are set
-// or not. 
+// or not.
 int bitcount_oc(unsigned x)
 {
 	int b;
