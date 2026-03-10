@@ -12,6 +12,18 @@ int copy(char to[], char from[], int max);
 
 int main()
 {
+	int	i, j;
+	char	s[MAXBUF], t[MAXBUF];
+
+	i = 0;
+	j = 0;
+
+	while ((i = get_line(s, MAXBUF)) > 0) {
+		j = copy(t, s, MAXBUF);
+		printf("%s\nOriginal length: %d\nExpanded length: %d\n\n",
+		       t, i, j);
+	}
+
 	return 0;
 }
 
@@ -31,18 +43,22 @@ int get_line(char s[], int max)
 
 int copy(char to[], char from[], int max)
 {
-	int i, j;
+	int	i, j;
+	char	c;
 
 	i = 0;
 	j = 0;
 	while (from[i] != '\0' && j < max - 1) {
-		switch (from[i]) {
+		c = from[i];
+		switch (c) {
 		case '\n':
 			to[j++] = '\\';
-			to[j++] = 'n';
+			to[j] = 'n';
+			break;
 		case '\t':
 			to[j++] = '\\';
-			to[j++] = 't';
+			to[j] = 't';
+			break;
 		default:
 			to[j] = from[i];
 		}
