@@ -87,6 +87,22 @@ int binsearch_orig(int x, int v[], int n)
 
 int binsearch(int x, int v[], int n)
 {
-	return 0;
+	int low, high, mid;
+
+	mid = -1;
+	low = 0;
+	high = n - 1;
+
+	while (mid != x) {
+		mid = (low + high) / 2;
+
+		if (x <= v[mid]) {
+			high = mid + 1;
+		} else {
+			low = mid + 1;
+		}
+	}
+
+	return mid;
 }
 
