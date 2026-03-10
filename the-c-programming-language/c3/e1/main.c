@@ -14,7 +14,7 @@ int binsearch(int x, int v[], int n);
 
 int main()
 {
-	int	i, x, lx, idxn, idxo;
+	int	i, x, lx, news, origs;
 	int	nums[SEARCH_SIZE];
 	char	sx[MAX_BUF];
 
@@ -30,10 +30,11 @@ int main()
 			x = SEARCH_SIZE - 1;
 		}
 
-		idxo = binsearch_orig(x, nums, SEARCH_SIZE);
-		idxn = binsearch(x, nums, SEARCH_SIZE);
+		origs = binsearch_orig(x, nums, SEARCH_SIZE);
+		news = binsearch(x, nums, SEARCH_SIZE);
 
-		printf("Orig binsearch: %d\nNew binsearch: %d\n\n", idxo, idxn);
+		printf("Orig binsearch num steps: %d\n", origs);
+		printf("New binsearch num steps: %d\n\n", news);
 		printf("Enter search value: ");
 	}
 
@@ -64,11 +65,12 @@ int atoi(char s[])
 
 int binsearch_orig(int x, int v[], int n)
 {
-	int low, high, mid, val;
+	int low, high, mid, val, steps;
 
 	val = -1;
 	low = 0;
 	high = n - 1;
+	steps = 0;
 
 	while (low <= high) {
 		mid = (low + high) / 2;
@@ -80,18 +82,20 @@ int binsearch_orig(int x, int v[], int n)
 			val = mid;
 			low = high + 1;
 		}
+		++steps;
 	}
 
-	return val;
+	return steps;
 }
 
 int binsearch(int x, int v[], int n)
 {
-	int low, high, mid;
+	int low, high, mid, steps;
 
 	mid = -1;
 	low = 0;
 	high = n - 1;
+	steps = 0;
 
 	while (mid != x) {
 		mid = (low + high) / 2;
@@ -101,8 +105,10 @@ int binsearch(int x, int v[], int n)
 		} else {
 			low = mid + 1;
 		}
+
+		++steps;
 	}
 
-	return mid;
+	return steps;
 }
 
