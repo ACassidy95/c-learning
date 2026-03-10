@@ -8,20 +8,26 @@
 #define MAXBUF	1024
 
 int get_line(char s[], int max);
-int copy(char to[], char from[], int max);
+int copy_collapse(char to[], char from[], int max);
+int copy_expand(char to[], char from[], int max);
 
 int main()
 {
-	int	i, j;
-	char	s[MAXBUF], t[MAXBUF];
+	int	i, j, k;
+	char	s[MAXBUF], t[MAXBUF], u[MAXBUF];
 
 	i = 0;
 	j = 0;
+	k = 0;
 
 	while ((i = get_line(s, MAXBUF)) > 0) {
-		j = copy(t, s, MAXBUF);
-		printf("%s\nOriginal length: %d\nExpanded length: %d\n\n",
-		       t, i, j);
+		j = copy_collapse(t, s, MAXBUF);
+		k = copy_expand(u, s, MAXBUF);
+
+		printf("%s\n%s\n", t, u);
+		printf("Original length: %3d\n", i);
+		printf("Collapsed escape length: %3d\n", j);
+		printf("Expanded literal length: %3d\n\n", k);
 	}
 
 	return 0;
@@ -41,7 +47,7 @@ int get_line(char s[], int max)
 	return i;
 }
 
-int copy(char to[], char from[], int max)
+int copy_collapse(char to[], char from[], int max)
 {
 	int	i, j;
 	char	c;
@@ -58,6 +64,43 @@ int copy(char to[], char from[], int max)
 		case '\t':
 			to[j++] = '\\';
 			to[j] = 't';
+			break;
+		default:
+			to[j] = from[i];
+		}
+
+		++i;
+		++j;
+	}
+
+	to[j] = '\0';
+	return j;
+}
+
+int copy_expand(char to[], char from[], int max)
+{
+	int	i, j;
+	char	c;
+
+	i = 0;
+	j = 0;
+
+	while (from[i] != '\0' && j < max - 1) {
+		c = from[i];
+		switch (c) {
+		case '\\':
+			switch (from[i+1]) {
+			case 'n':
+				to[j] = '\n';
+				++i;
+				break;
+			case 't':
+				to[j] = '\t';
+				++i;
+				break;
+			default:
+				to[j] = from[i];
+			}
 			break;
 		default:
 			to[j] = from[i];
