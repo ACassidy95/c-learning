@@ -4,6 +4,7 @@
 // regardless of the underlying machine.
 
 #include <stdio.h>
+#include <string.h>
 
 #define MAXBUF 64
 
@@ -18,7 +19,7 @@ int main()
 	int	len, xo, xn;
 	char	s[MAXBUF], so[MAXBUF], sn[MAXBUF];
 
-	while ((len = get_num(s, MAXBUF)) > 0) {
+	while (len = get_num(s, MAXBUF)) {
 		xo = atoi(s);
 		xn = xo;
 
@@ -27,6 +28,9 @@ int main()
 
 		itoa_new(xn, sn);
 		printf("X value (itoa new): %d\n", xn);
+
+		reverse(s);
+		printf("Reversed string: %s\n\n", s);
 	}
 
 	return 0;
@@ -62,4 +66,24 @@ void itoa_orig(int n, char s[])
 void itoa_new(int n, char s[])
 {
 	return;
+}
+
+void reverse(char s[])
+{
+	int l, i, str, off;
+
+	l = strlen(s);
+
+	str = 0;
+	off = 1;
+	if (s[0] == '-') {
+		str = 1;
+		off = 0;
+	}
+
+	for (i = str; i < (l + str) / 2; i++) {
+		s[i] ^= s[l - i - off];
+		s[l - i - off] ^= s[i];
+		s[i] ^= s[l - i - off];
+	}
 }
