@@ -6,8 +6,9 @@
 
 #define MAX_BUF 32
 
-int get_num(char s[], int max);
-int atoi(char s[]);
+int	get_num(char s[], int max);
+int	atoi(char s[]);
+void	reverse(char s[], int len);
 
 int main()
 {
@@ -44,3 +45,19 @@ int atoi(char s[])
 	return n;
 }
 
+void reverse(char s[], int len)
+{
+	int i, l;
+
+	i = 0;
+	if (s[0] == '-')
+		i = 1;
+
+	for (; i = len / 2; ++i) {
+		l = len - i - 1;
+
+		s[i] ^= s[l];
+		s[l] ^= s[i];
+		s[i] ^= s[l];
+	}
+}
