@@ -5,15 +5,25 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_BUF		1024
+#define MAX_BUF		32
 #define MIN_BASE	2
 #define MAX_BASE	16
 
 int	get_num(char s[], int maxbuf);
 int	atoi(char s[]);
 void	itob(int x, char s[], int base);
-void	itobnc(int x, char s[], int base);
-int	abs(int x);
+
+// Converts a numeric character in base B to its integer value
+int	ctoi(char c);
+
+// Converts an integer value x to its string representation in B's Complement
+// for a given base B.
+void	itobc(int x, char s[], int base);
+
+// Takes a base B string representation of a negative integer value
+// in the string s and repopulates s with the B's Complement representation of
+// the same value
+void	complement(char s[], int base);
 
 int main()
 {
@@ -26,7 +36,7 @@ int main()
 
 		for (b = MIN_BASE; b <= MAX_BASE; ++b) {
 			itob(x, sb, b);
-			itobnc(x, sbnc, b);
+			itobc(x, sbnc, b);
 			printf("%d in base-%d is: %8s %8s\n", x, b, sb, sbnc);
 		}
 
@@ -102,20 +112,13 @@ void itob(int x, char s[], int base)
 	s[i] = '\0';
 }
 
-void itobnc(int x, char s[], int base)
+void itobc(int x, char s[], int base)
 {
 	int i;
 
 	// lb - lower bound - Nearest power of base b not greater than x
 	// nd - number of digits - Number of digits in str repr of x in base b
 	int lb, nd, sign;
-
-	// bmax - Representation of max value in base B used to calculate B's
-	// complement for base B
-	// bcomp - B's complement representation of x, calculated as digitwise
-	// bmax - x
-	char bmax[MAX_BUF];
-	char bcomp[MAX_BUF];
 
 	nd = 1;
 	lb = 1;
@@ -134,14 +137,8 @@ void itobnc(int x, char s[], int base)
 		--nd;
 	}
 
-	for (i = 0; i < nd; ++i) {
-		bmax[i] = '0' + (base - 1);
-		if (bmax[i] > '9') {
-			bmax[i] = 'A' + (bmax[i] - '9' - 1);
-		}
-	}
-
-	for (i = 0; i < nd; ++i) {
+	s[0] = '0';
+	for (i = 1; i <= nd; ++i) {
 		s[i] = '0';
 
 		while (x >= lb) {
@@ -155,33 +152,47 @@ void itobnc(int x, char s[], int base)
 
 		lb /= base;
 	}
-
-	char d;
-	// If the input number was negative, calculate the number's
-	// representation in B's complement for the given base B.
-	if (sign < 0) {
-		for(i = nd - 1; i >= 0; --i) {
-			d = bmax[i] - s[i];
-
-			if (d <= 9 || d >= 'A' - '0')
-				bcomp[i] = '0' + d;
-			else
-				bcomp[i] = '0' + (d % 10);
-		}
-
-		for (i = 0; i < nd; ++i)
-			s[i] = bcomp[i];
-	}
 	s[i] = '\0';
+
+	// If the input number was negative, repopulate the number's
+	// representation in B's complement for the given base B
+	if (sign < 0)
+		complement(s, base);
 }
 
-int abs(int x)
+void complement(char s[], int base)
 {
-	int a;
+	char	bmax, c;
+	int	i;
 
-	a = x;
-	if (a < 0)
-		a = -a;
+	// Find character for digit representing highest digital value in base
+	// B. B's complement is calculated by pairwise s[i] = bmax - s[i] which
+	// will end in range 0 - bmax
+	bmax = '0' + (base - 1);
+	if (bmax > '9')
+		bmax = 'A' + (bmax - '9' - 1);
 
-	return a;
+	for (i = 0; s[i] != '\0'; ++i) {
+		c = ctoi(bmax) - ctoi(s[i]);
+		if (c < 10) {
+			s[i] = '0' + c;
+		} else {
+			s[i] = 'A' + (c % 10);
+		}
+	}
+
+	s[i] = '\0';
+	return;
+}
+
+int ctoi(char c)
+{
+	int i;
+
+	if (c >= '0' && c <= '9')
+		i = c - '0';
+	else if (c >= 'A' && c <= 'Z')
+		i = 10 + (c - 'A');
+
+	return i;
 }
