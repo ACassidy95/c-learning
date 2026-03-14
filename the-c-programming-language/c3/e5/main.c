@@ -37,7 +37,7 @@ int main()
 		for (b = MIN_BASE; b <= MAX_BASE; ++b) {
 			itob(x, sb, b);
 			itobc(x, sbnc, b);
-			printf("%d in base-%d is: %8s %8s\n", x, b, sb, sbnc);
+			printf("%d in base-%d is: %9s %9s\n", x, b, sb, sbnc);
 		}
 
 		printf("$> ");
@@ -77,29 +77,32 @@ int atoi(char s[])
 
 void itob(int x, char s[], int base)
 {
-	int bx, i, lb, nd, cd;
+	int i, sign, lb, nd, cd;
 
-	bx = x;
 	lb = 1;
 	nd = 1;
 
+	if ((sign = x) < 0)
+		x = -x;
+
 	// Find the least nearest power of base to x, i.e.
 	// b^(n+1) > x >= b^n
-	while (lb < bx) {
+	while (lb < x) {
 		lb *= base;
 		++nd;
 	}
 
-	if (lb > bx) {
+	if (lb > x) {
 		lb /= base;
 		--nd;
 	}
 
-	for (i = 0; i < nd; ++i) {
+	s[i] = '0';
+	for (i = 1; i <= nd; ++i) {
 		s[i] = '0';
-		while (bx >= lb) {
+		while (x >= lb) {
 			s[i] += 1;
-			bx -= lb;
+			x -= lb;
 		}
 
 		if (s[i] > '9') {
@@ -109,6 +112,10 @@ void itob(int x, char s[], int base)
 
 		lb /= base;
 	}
+
+	if (sign < 0)
+		s[0] = '-';
+
 	s[i] = '\0';
 }
 
@@ -163,7 +170,7 @@ void itobc(int x, char s[], int base)
 void complement(char s[], int base)
 {
 	char	bmax, c;
-	int	i;
+	int	i, cry;
 
 	// Find character for digit representing highest digital value in base
 	// B. B's complement is calculated by pairwise s[i] = bmax - s[i] which
@@ -180,8 +187,23 @@ void complement(char s[], int base)
 			s[i] = 'A' + (c % 10);
 		}
 	}
-
 	s[i] = '\0';
+
+	// Add 1 and carry along up to the sign digit
+	cry = 0;
+	do {
+		--i;
+		s[i]++;
+		if (s[i] > bmax) {
+			cry = 1;
+		} else {
+			cry = 0;
+		}
+
+		if (s[i] > '9')
+			s[i] = 'A' + (s[i] - '9' - 1);
+	} while (i > 0 && cry);
+
 	return;
 }
 
