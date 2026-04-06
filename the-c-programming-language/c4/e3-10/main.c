@@ -2,12 +2,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAXOP	100 // Maximum size of operator/operand
-#define NUMBER	'0' // Signal detection of a number in input
+#define MAXOP		100 // Maximum width of operator/operand
+#define	MAXSTACK	100 // Maximum value stack depth
+#define NUMBER		'0' // Signal detection of a number in input
 
 int	getop(char []);
 void	push(double);
 double	pop(void);
+
+// Value stack and stack pointer
+double	val[MAXSTACK];
+int	valsp = 0;
 
 int main()
 {
@@ -18,6 +23,27 @@ int main()
 	char	s[MAXOP];
 
 	return 0;
+}
+
+void push(double f)
+{
+	if (valsp < MAXSTACK)
+		val[valsp++] = f;
+	else
+		printf("Error: Stack overflow - max %d\n", MAXSTACK);
+
+	return;
+}
+
+double pop(void)
+{
+	double f;
+
+	f = 0.0;
+	if (valsp > 0)
+		f = val[--valsp];
+
+	return f;
 }
 
 #define UGBUFSIZE 8
@@ -76,20 +102,9 @@ int getch(void)
 void ungetch(int c)
 {
 	if (ugbufp >= UGBUFSIZE)
-		printf("Error: ungetch limit of %d exceeded", UGBUFSIZE);
+		printf("Error: ungetch limit of %d exceeded\n", UGBUFSIZE);
 	else
 		ugbuf[ugbufp++] = c;
 	return;
 }
 
-void push(double x)
-{
-	return;
-}
-
-double pop(void)
-{
-	double x;
-
-	return x;
-}
