@@ -45,6 +45,14 @@ int main()
 			else
 				push(pop() / opd2);
 			break;
+		// 4.4: Add provisions for modulo operator
+		case '%':
+			opd2 = pop();
+			if (opd2 == 0.0)
+				printf("Error: Zero division\n");
+			else
+				push((int)pop() % (int)opd2);
+			break;
 		case '\n':
 			printf("\t%.8g\n>", pop());
 			break;
