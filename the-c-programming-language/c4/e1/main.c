@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #define MAXLINE 1024
 
@@ -45,11 +46,11 @@ int strlindex(char str[], char find[])
 
 	found = -1;
 
-	for (i = 0; str[i] != '\0'; ++i) {
+	for (i = 0; str[i] != '\0' && found < 0; ++i) {
 		for (j = i, k = 0; find[k] != '\0' && str[j] == find[k]; ++j, ++k)
 			;
 
-		if (k > 0 && t[k] == '\0')
+		if (k > 0 && find[k] == '\0')
 			found = i;
 	}
 
@@ -58,5 +59,26 @@ int strlindex(char str[], char find[])
 
 int strrindex(char str[], char find[])
 {
-	return 0;
+	int i, j, k;
+	int found, slen, flen;
+
+	found = -1;
+	slen = strlen(str);
+	flen = strlen(find);
+
+	for (i = slen; i >= 0 && found < 0; --i) {
+		// Additional condition that skips cases when the find string is
+		// too long to appear to the right of the current offset of the
+		// base string
+		for (j = i, k = 0; i + flen <= slen &&
+		     find[k] != '\0' &&
+		     str[j] == find[k]; ++j, ++k)
+			;
+
+		if (k > 0 && find[k] == '\0')
+			found = i;
+	}
+
+	return found;
 }
+
