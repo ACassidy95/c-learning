@@ -6,8 +6,15 @@
 
 #define MAXOP		100 // Maximum width of operator/operand
 #define	MAXSTACK	100 // Maximum value stack depth
+#define MAXSYMBOL	27  // Maximum amount of variable names, including
+			    // special variable '?' for most recently printed
+			    // value
 #define NUMBER		'0' // Signal detection of a number in input
 #define MFUNC		'm' // Signal detection of a math.h function
+#define SYMBOL		'v' // Signal detection of a variable; only single
+			    // letter variables are supported
+#define LATEST		'?' // Special variable holding the most recent printed
+			    // value
 
 int	getop(char []);
 void	push(double);
@@ -17,6 +24,12 @@ double	apply_func(char [], double);
 // Value stack and stack pointer
 double	val[MAXSTACK];
 int	valsp = 0;
+
+// Symbol value and lookup table
+// The value table holds the values corresponding to a variable and the lookup
+// table determines if that name is set
+double	symbol_values[MAXSYMBOL];
+int	symbol_lookup[MAXSYMBOL] = { 0 };
 
 int main()
 {
@@ -61,7 +74,10 @@ int main()
 				push((int)pop() % (int)opd2);
 			break;
 		case '\n':
-			printf("\t%.8g\n>", pop());
+			if (symbol_lookup[0] == 0)
+				symbol_lookup == 1;
+			symbol_value[0] = pop();
+			printf("\t.8g\n>", symbol_value[0])
 			break;
 		default:
 			printf("Error: Unknown operator/operand %s\n", s);
@@ -178,6 +194,7 @@ int getop(char s[])
 		else
 			op = c;
 	// 4.5: Add provisions for math.h functions
+	// 4.6: Add provisions for single-letter variable name declations
 	} else if (isalpha(c)) {
 		while (isalpha(s[++i] = c = getch()))
 			;
@@ -185,7 +202,10 @@ int getop(char s[])
 		if (c != EOF)
 			ungetch(c);
 
-		op = MFUNC;
+		if (strlen(s) > 1)
+			op = MFUNC;
+		else
+			op = SYMBOL;
 	}
 
 	if(isdigit(c)) {
