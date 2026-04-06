@@ -13,23 +13,22 @@
 #define MFUNC		'm' // Signal detection of a math.h function
 #define SYMBOL		'v' // Signal detection of a variable; only single
 			    // letter variables are supported
-#define LATEST		'?' // Special variable holding the most recent printed
-			    // value
 
 int	getop(char []);
 void	push(double);
 double	pop(void);
+// 4.4: Add additional stack functions
+double	peek(void);	// View top of stack without popping
+double	dup(void);	// Duplicate top of stack
+double	swaptop(void);	// Swap top of stack with element beneath it
+void	clear(void);	// Clear all stack elements
+void	print(void);	// Print stack elements
+// 4.5: Add support for math.h functions
 double	apply_func(char [], double);
 
 // Value stack and stack pointer
 double	val[MAXSTACK];
 int	valsp = 0;
-
-// Symbol value and lookup table
-// The value table holds the values corresponding to a variable and the lookup
-// table determines if that name is set
-double	symbol_values[MAXSYMBOL];
-int	symbol_lookup[MAXSYMBOL] = { 0 };
 
 int main()
 {
@@ -74,13 +73,17 @@ int main()
 				push((int)pop() % (int)opd2);
 			break;
 		case '\n':
-			if (symbol_lookup[0] == 0)
-				symbol_lookup == 1;
-			symbol_value[0] = pop();
-			printf("\t.8g\n>", symbol_value[0])
+			printf("\t%.8g\n>", peek());
+			break;
+		case '?':
+			print();
+			break;
+		case '@':
+			clear();
 			break;
 		default:
 			printf("Error: Unknown operator/operand %s\n", s);
+			clear();
 			break;
 		}
 	}
@@ -107,6 +110,66 @@ double pop(void)
 		f = val[--valsp];
 
 	return f;
+}
+
+// 4.4: Add support for additional stack operations
+
+double peek(void)
+{
+	double f;
+
+	if (valsp > 0)
+		f = val[valsp - 1];
+	else
+		f = val[valsp];
+
+	return f;
+}
+
+double dup(void)
+{
+	push(peek());
+	return peek();
+}
+
+double swaptop(void)
+{
+	double top, next;
+
+	if (valsp >= 2) {
+		top = pop();
+		next = pop();
+		push(top);
+		push(next);
+	} else if (valsp == 1) {
+		top = pop();
+		next = 0.0;
+		push(top);
+		push(next);
+	} else {
+		next = 0.0;
+	}
+
+	return next;
+}
+
+void clear(void) {
+	while (valsp != 0)
+		pop();
+
+	return;
+}
+
+void print(void) {
+	int v;
+
+	v = valsp;
+	while (v > 0) {
+		printf(" %.8g <-", val[v - 1]);
+		--v;
+	}
+	printf("\n");
+	return;
 }
 
 //4.5: Apply provisions for math.h functions
@@ -180,7 +243,7 @@ int getop(char s[])
 	s[1] = '\0';
 
 	// Not a number or function
-	if (!isdigit(c) && !isalpha(c) && c != '.' && c != '-')
+	if (!isdigit(c) && !islower(c) && c != '.' && c != '-')
 		op = c;
 	// 4.4: Add provisions for negative numbers
 	else if (c == '-') {
@@ -195,8 +258,8 @@ int getop(char s[])
 			op = c;
 	// 4.5: Add provisions for math.h functions
 	// 4.6: Add provisions for single-letter variable name declations
-	} else if (isalpha(c)) {
-		while (isalpha(s[++i] = c = getch()))
+	} else if (islower(c)) {
+		while (islower(s[++i] = c = getch()))
 			;
 		s[i] = '\0';
 		if (c != EOF)
