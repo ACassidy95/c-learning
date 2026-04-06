@@ -1,14 +1,18 @@
 #include <ctype.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define MAXOP		100 // Maximum width of operator/operand
 #define	MAXSTACK	100 // Maximum value stack depth
 #define NUMBER		'0' // Signal detection of a number in input
+#define MFUNC		'm' // Signal detection of a math.h function
 
 int	getop(char []);
 void	push(double);
 double	pop(void);
+double	apply_func(char [], double);
 
 // Value stack and stack pointer
 double	val[MAXSTACK];
@@ -27,6 +31,9 @@ int main()
 		switch (type) {
 		case NUMBER:
 			push(atof(s));
+			break;
+		case MFUNC:
+			push(apply_func(s, pop()));
 			break;
 		case '+':
 			push(pop() + pop());
@@ -86,6 +93,59 @@ double pop(void)
 	return f;
 }
 
+//4.5: Apply provisions for math.h functions
+char func_sin[]		= "sin";
+char func_cos[]		= "cos";
+char func_tan[]		= "tan";
+char func_asin[]	= "asin";
+char func_acos[]	= "acos";
+char func_atan[]	= "atan";
+char func_sinh[]	= "sinh";
+char func_cosh[]	= "cosh";
+char func_tanh[]	= "tanh";
+char func_exp[]		= "exp";
+char func_log[]		= "log";
+char func_log10[]	= "logten";
+char func_sqrt[]	= "sqrt";
+
+double apply_func(char s[], double f)
+{
+	double x;
+
+	if (!strncmp(s, func_sin, strlen(func_sin)))
+		x = sin(f);
+	else if (!strncmp(s, func_cos, strlen(func_cos)))
+		x = cos(f);
+	else if (!strncmp(s, func_tan, strlen(func_tan)))
+		x = tan(f);
+	else if (!strncmp(s, func_asin, strlen(func_asin)))
+		x = asin(f);
+	else if (!strncmp(s, func_acos, strlen(func_acos)))
+		x = acos(f);
+	else if (!strncmp(s, func_atan, strlen(func_atan)))
+		x = atan(f);
+	else if (!strncmp(s, func_sinh, strlen(func_sinh)))
+		x = sinh(f);
+	else if (!strncmp(s, func_cosh, strlen(func_cosh)))
+		x = cosh(f);
+	else if (!strncmp(s, func_tanh, strlen(func_tanh)))
+		x = tanh(f);
+	else if (!strncmp(s, func_exp, strlen(func_exp)))
+		x = exp(f);
+	else if (!strncmp(s, func_log, strlen(func_log)))
+		x = log(f);
+	else if (!strncmp(s, func_log10, strlen(func_log10)))
+		x = log10(f);
+	else if (!strncmp(s, func_sqrt, strlen(func_sqrt)))
+		x = sqrt(f);
+	else {
+		printf("Error: Unknown function %s\n", s);
+		x = f;
+	}
+
+	return x;
+}
+
 #define UGBUFSIZE 8
 
 char	ugbuf[UGBUFSIZE];
@@ -103,8 +163,8 @@ int getop(char s[])
 		;
 	s[1] = '\0';
 
-	// Not a number
-	if (!isdigit(c) && c != '.' && c != '-')
+	// Not a number or function
+	if (!isdigit(c) && !isalpha(c) && c != '.' && c != '-')
 		op = c;
 	// 4.4: Add provisions for negative numbers
 	else if (c == '-') {
@@ -117,6 +177,15 @@ int getop(char s[])
 		}
 		else
 			op = c;
+	// 4.5: Add provisions for math.h functions
+	} else if (isalpha(c)) {
+		while (isalpha(s[++i] = c = getch()))
+			;
+		s[i] = '\0';
+		if (c != EOF)
+			ungetch(c);
+
+		op = MFUNC;
 	}
 
 	if(isdigit(c)) {
