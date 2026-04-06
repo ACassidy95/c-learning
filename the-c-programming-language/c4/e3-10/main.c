@@ -22,6 +22,38 @@ int main()
 	int	type;
 	char	s[MAXOP];
 
+	printf("Reverse-Polish Notation Calculator:\n>");
+	while ((type = getop(s)) != EOF) {
+		switch (type) {
+		case NUMBER:
+			push(atof(s));
+			break;
+		case '+':
+			push(pop() + pop());
+			break;
+		case '*':
+			push(pop() * pop());
+			break;
+		case '-':
+			opd2 = pop();
+			push(pop() - opd2);
+			break;
+		case '/':
+			opd2 = pop();
+			if (opd2 == 0.0)
+				printf("Error: Zero division\n");
+			else
+				push(pop() / opd2);
+			break;
+		case '\n':
+			printf("\t%.8g\n>", pop());
+			break;
+		default:
+			printf("Error: Unknown operator/operand %s\n", s);
+			break;
+		}
+	}
+
 	return 0;
 }
 
@@ -58,7 +90,7 @@ int getop(char s[])
 {
 	int i, c, op;
 
-	while (isspace(s[0] = c = getch()))
+	while ((s[0] = c = getch()) == ' ' || c == '\t')
 		;
 	s[1] = '\0';
 
