@@ -40,7 +40,20 @@ int get_line(char line[], int lim)
 
 int strlindex(char str[], char find[])
 {
-	return 0;
+	int i, j, k;
+	int found;
+
+	found = -1;
+
+	for (i = 0; str[i] != '\0'; ++i) {
+		for (j = i, k = 0; find[k] != '\0' && str[j] == find[k]; ++j, ++k)
+			;
+
+		if (k > 0 && t[k] == '\0')
+			found = i;
+	}
+
+	return found;
 }
 
 int strrindex(char str[], char find[])
