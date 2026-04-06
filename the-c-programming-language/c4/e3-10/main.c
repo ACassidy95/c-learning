@@ -96,18 +96,30 @@ void	ungetch(int);
 
 int getop(char s[])
 {
-	int i, c, op;
+	int i, c, cc, op;
 
-	while ((s[0] = c = getch()) == ' ' || c == '\t')
+	i = 0;
+	while ((s[i] = c = getch()) == ' ' || c == '\t')
 		;
 	s[1] = '\0';
 
 	// Not a number
-	if (!isdigit(c) && c != '.')
+	if (!isdigit(c) && c != '.' && c != '-')
 		op = c;
-	else if(isdigit(c)) {
-		i = 0;
+	// 4.4: Add provisions for negative numbers
+	else if (c == '-') {
+		// if the lookahead is a digit, ensure the negative is recorded
+		// and push the lookahead back
+		if (isdigit(cc = getch())) {
+			s[i] = c;
+			c = cc;
+			ungetch(cc);
+		}
+		else
+			op = c;
+	}
 
+	if(isdigit(c)) {
 		// Collect integer part of input number
 		while (isdigit(s[++i] = c = getch()))
 			;
