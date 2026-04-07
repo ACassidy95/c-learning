@@ -225,9 +225,9 @@ double apply_func(char s[], double f)
 	return x;
 }
 
-#define UGBUFSIZE 32
+#define UGBUFSIZE 1
 
-char	ugbuf[UGBUFSIZE];
+int	ugbuf[UGBUFSIZE];
 int	ugbufp = 0;
 
 int	getch(void);
