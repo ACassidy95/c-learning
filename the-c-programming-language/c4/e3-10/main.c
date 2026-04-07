@@ -225,13 +225,15 @@ double apply_func(char s[], double f)
 	return x;
 }
 
-#define UGBUFSIZE 8
+#define UGBUFSIZE 32
 
 char	ugbuf[UGBUFSIZE];
 int	ugbufp = 0;
 
 int	getch(void);
 void	ungetch(int);
+// 4.7: Add a routine ungets that pushes an entire string back
+int	ungets(char []);
 
 int getop(char s[])
 {
@@ -312,3 +314,13 @@ void ungetch(int c)
 	return;
 }
 
+// 4.7: Pushback an entire string, or as much of it as possible
+int ungets(char s[])
+{
+	int pb;
+
+	for (pb = 0; pb < UGBUFSIZE && s[pb] != '\0'; ++pb)
+		ungetch(s[pb]);
+
+	return pb;
+}
