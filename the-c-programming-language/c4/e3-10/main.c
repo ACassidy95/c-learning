@@ -6,8 +6,8 @@
 
 #define MAXOP		100 // Maximum width of operator/operand
 #define	MAXSTACK	100 // Maximum value stack depth
-#define MAXSYMBOL	27  // Maximum amount of variable names, including
-			    // special variable '?' for most recently printed
+#define MAXSYMBOL	26  // Maximum amount of variable names, including
+			    // special variable '^' for most recently printed
 			    // value
 #define NUMBER		'0' // Signal detection of a number in input
 #define MFUNC		'm' // Signal detection of a math.h function
@@ -26,9 +26,20 @@ void	print(void);	// Print stack elements
 // 4.5: Add support for math.h functions
 double	apply_func(char [], double);
 
+// 4.6: Add functions to define and lookup variables
+int	declared(char []);
+void	declare(char []);
+void	assign(char [], double);
+double	lookup(char []);
+
 // Value stack and stack pointer
 double	val[MAXSTACK];
 int	valsp = 0;
+
+// 4.6: Simple symbol table to allow definition of single-char variable names
+// plus a lookup to determine if a given symbol name is declared
+double	symbol_table[MAXSYMBOL];
+double	symbol_lookup[MAXSYMBOL] = { 0 };
 
 int main()
 {
@@ -46,6 +57,14 @@ int main()
 			break;
 		case MFUNC:
 			push(apply_func(s, pop()));
+			break;
+		case SYMBOL:
+			if (declared(s)) {
+				push(lookup(s));
+			} else {
+				declare(s);
+				assign(s, peek());
+			}
 			break;
 		case '+':
 			push(pop() + pop());
@@ -223,6 +242,48 @@ double apply_func(char s[], double f)
 	}
 
 	return x;
+}
+
+// 4.6: Add functions to support variable definitions
+int declared(char s[])
+{
+	char sym;
+
+	sym = s[0];
+	return symbol_lookup[sym - 'a'];
+}
+
+void declare(char s[])
+{
+	char sym;
+
+	sym = s[0];
+	symbol_lookup[sym - 'a'] = 1;
+	return;
+}
+
+void assign(char s[], double f)
+{
+	char sym;
+
+	if (!declared(s))
+		declare(s);
+
+	sym = s[0];
+	symbol_table[sym - 'a'] = f;
+
+	return;
+}
+
+double lookup(char s[])
+{
+	double	f;
+	char	sym;
+
+	sym = s[0];
+	f = symbol_table[sym - 'a'];
+
+	return f;
 }
 
 #define UGBUFSIZE 1
