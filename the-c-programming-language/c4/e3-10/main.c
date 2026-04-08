@@ -286,11 +286,6 @@ double lookup(char s[])
 	return f;
 }
 
-#define UGBUFSIZE 1
-
-int	ugbuf[UGBUFSIZE];
-int	ugbufp = 0;
-
 int	getch(void);
 void	ungetch(int);
 // 4.7: Add a routine ungets that pushes an entire string back
@@ -352,36 +347,43 @@ int getop(char s[])
 	return op;
 }
 
-// Retrieve a pushed-back character or one from stdin
+int	pushback = '\0';
+
+// Retrieve pushed-back character if one exists otherwise read from stdin
 int getch(void)
 {
 	int c;
 
-	if (ugbufp > 0)
-		c = ugbuf[--ugbufp];
-	else
+	if (pushback != '\0') {
+		c = pushback;
+		pushback = '\0';
+	} else {
 		c = getchar();
+	}
 
 	return c;
 }
 
-// Push an unwanted character back to input
+// Push excess character back to be read again
 void ungetch(int c)
 {
-	if (ugbufp >= UGBUFSIZE)
-		printf("Error: ungetch limit of %d exceeded\n", UGBUFSIZE);
-	else
-		ugbuf[ugbufp++] = c;
+	if (pushback != '\0') {
+		printf("Error: Pusback limit exceeded for %d - %d waiting\n",
+		       c, pushback);
+	} else {
+		pushback = c;
+	}
+
 	return;
 }
 
 // 4.7: Pushback an entire string, or as much of it as possible
-int ungets(char s[])
-{
-	int pb;
-
-	for (pb = 0; pb < UGBUFSIZE && s[pb] != '\0'; ++pb)
-		ungetch(s[pb]);
-
-	return pb;
-}
+// int ungets(char s[])
+// {
+// 	int pb;
+//
+// 	for (pb = 0; pb < UGBUFSIZE && s[pb] != '\0'; ++pb)
+// 		ungetch(s[pb]);
+//
+// 	return pb;
+// }
