@@ -22,7 +22,7 @@ double	peek(void);	// View top of stack without popping
 double	dup(void);	// Duplicate top of stack
 double	swaptop(void);	// Swap top of stack with element beneath it
 void	clear(void);	// Clear all stack elements
-void	print(void);	// Print stack elements
+void	print(int);	// Print stack elements
 // 4.5: Add support for math.h functions
 double	apply_func(char [], double);
 
@@ -95,14 +95,14 @@ int main()
 			else
 				push((int)pop() % (int)opd2);
 			break;
-		case '\n':
-			printf("\t%.8g\n>", peek());
-			break;
 		case '?':
-			print();
+			print(valsp);
 			break;
 		case '@':
 			clear();
+			break;
+		case '\n':
+			printf("\t%.8g\n>", peek());
 			break;
 		default:
 			printf("Error: Unknown operator/operand %s\n", s);
@@ -176,22 +176,25 @@ double swaptop(void)
 	return next;
 }
 
+void print(int n) {
+	int v;
+
+	v = valsp;
+	if (n > valsp)
+		n = valsp;
+
+	while (v - 1 >= 0 && v - 1 >= valsp - n) {
+		printf(" %.8g ,", val[v - 1]);
+		--v;
+	}
+	printf("\n");
+	return;
+}
+
 void clear(void) {
 	while (valsp != 0)
 		pop();
 
-	return;
-}
-
-void print(void) {
-	int v;
-
-	v = valsp;
-	while (v > 0) {
-		printf(" %.8g <-", val[v - 1]);
-		--v;
-	}
-	printf("\n");
 	return;
 }
 
