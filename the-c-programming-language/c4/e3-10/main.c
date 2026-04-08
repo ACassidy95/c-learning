@@ -83,6 +83,10 @@ int main()
 			else
 				push(pop() / opd2);
 			break;
+		case '^':
+			opd2 = pop();
+			push(pow(pop(), opd2));
+			break;
 		// 4.4: Add provisions for modulo operator
 		case '%':
 			opd2 = pop();
