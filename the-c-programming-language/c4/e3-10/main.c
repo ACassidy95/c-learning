@@ -64,6 +64,7 @@ int main()
 			} else {
 				declare(s);
 				assign(s, peek());
+				pop();
 			}
 			break;
 		case '+':
@@ -102,7 +103,9 @@ int main()
 			clear();
 			break;
 		case '\n':
-			printf("\t%.8g\n>", peek());
+			if (valsp > 0)
+				printf("\t%.8g", peek());
+			printf("\n>");
 			break;
 		default:
 			printf("Error: Unknown operator/operand %s\n", s);
@@ -144,7 +147,7 @@ double peek(void)
 	if (valsp > 0)
 		f = val[valsp - 1];
 	else
-		f = val[valsp];
+		printf("Error: Peek - result buffer empty\n");
 
 	return f;
 }
