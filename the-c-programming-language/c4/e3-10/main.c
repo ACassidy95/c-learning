@@ -157,23 +157,19 @@ double dup(void)
 
 double swaptop(void)
 {
-	double top, next;
+	double t, n;
 
-	if (valsp >= 2) {
-		top = pop();
-		next = pop();
-		push(top);
-		push(next);
-	} else if (valsp == 1) {
-		top = pop();
-		next = 0.0;
-		push(top);
-		push(next);
+	if (valsp < 2) {
+		t = peek();
 	} else {
-		next = 0.0;
+		t = pop();
+		n = pop();
+		push(t);
+		push(n);
+		t = n;
 	}
 
-	return next;
+	return t;
 }
 
 void print(int n) {
