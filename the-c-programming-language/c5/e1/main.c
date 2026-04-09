@@ -34,8 +34,10 @@ int getint(int *n)
 	}
 
 	sign = (c == '-') ? -1 : 1;
-	if (c == '+' || c == '-')
-		c = getch();
+	if (c == '+' || c == '-') {
+		while (!isdigit(c = getchar()))
+			;
+	}
 
 	for (*n = 0; isdigit(c); c = getch())
 		*n = 10 * *n + (c - '0');
