@@ -6,13 +6,10 @@
 
 #define MAXOP		100 // Maximum width of operator/operand
 #define	MAXSTACK	100 // Maximum value stack depth
-#define MAXSYMBOL	26  // Maximum amount of variable names, including
-			    // special variable '^' for most recently printed
-			    // value
+#define MAXSYMBOL	26  // Maximum amount of variable names
 #define NUMBER		'0' // Signal detection of a number in input
 #define MFUNC		'm' // Signal detection of a math.h function
-#define SYMBOL		'v' // Signal detection of a variable; only single
-			    // letter variables are supported
+#define SYMBOL		'v' // Signal detection of a variable
 
 int	getop(char []);
 void	push(double);
