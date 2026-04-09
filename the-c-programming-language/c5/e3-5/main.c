@@ -43,7 +43,7 @@ int str_cat(char *s, char *t)
 
 	i = 0;
 	sl = str_len(s);
-	while (*t) {
+	while (*t && sl + i < MAXSTR) {
 		*(s + sl + i) = *t;
 		++t;
 		++i;
