@@ -1,32 +1,54 @@
+#include <stddef.h>
 #include <stdio.h>
 
 #define MAXSTR	1024
 
-int get_line(char *, int);
-int str_cat(char *, char *);
-int str_end(char *, char *);
-int str_len(char*);
+int	get_line(char *, size_t);
+size_t	str_cat(char *, char *);
+size_t	str_ncat(char *, char*, size_t);
+int	str_end(char *, char *);
+size_t	str_len(char*);
+int	str_ncmp(char *, char *, size_t);
+
+char *st1 = "Test string 1";
+char *st2 = "Test string 2";
+char *st3 = "Test string 1";
 
 int main(void)
 {
-	int	sl, tl, cl;
+	size_t	sl, tl, cl, cnl;
 	char	s[MAXSTR], t[MAXSTR];
 
 	while (sl = get_line(s, MAXSTR)) {
 		tl = get_line(t, MAXSTR);
 
 		if (str_end(s, t))
-			printf("\"%s\" occurs at the end of \"%s\" without concatenation\n", t, s);
+			printf("End: String 2 found as suffix in String 1\n");
 
 		cl = str_cat(s, t);
-		printf("Concat: %s\nlen(s): %d\nlen(t): %d\nlen(s#t): %d\n",
-		       s, sl, tl, cl);
+		printf("Cat:\nlen(s): %d\nlen(t): %d\nlen(s#t): %d\n",
+		       sl, tl, cl);
+
+		cnl = str_ncat(s, t, 5);
+		printf("Ncat:\nlen(s): %d\nlen(t): %d\nlen(s#5t): %d\n",
+		       sl, tl, cnl);
+
+		printf("Ncmp:\ncmp(%s, %s, 5): %d\ncmp(%s, %s, 13): %d\ncmp(%s, %s, 13): %d\n"
+		       "cmp(%s, %s, 20): %d\ncmp(%s, %s, 5): %d\ncmp(%s, %s, 13): %d\n"
+		       "cmp(%s, %s, 20): %d\n",
+		       st1, st2, str_ncmp(st1, st2, 5),
+		       st1, st2, str_ncmp(st1, st2, 13),
+		       st2, st1, str_ncmp(st2, st1, 13),
+		       st1, st2, str_ncmp(st1, st2, 20),
+		       st1, st3, str_ncmp(st1, st3, 5),
+		       st1, st3, str_ncmp(st1, st3, 13),
+		       st1, st3, str_ncmp(st1, st3, 20));
 	}
 
 	return 0;
 }
 
-int get_line(char *s, int lim)
+int get_line(char *s, size_t lim)
 {
 	int c, n;
 
@@ -44,9 +66,9 @@ int get_line(char *s, int lim)
 
 // Concatenates the contents of s and t and stores the result in s,
 // while returning the length of the combined string.
-int str_cat(char *s, char *t)
+size_t str_cat(char *s, char *t)
 {
-	int i, sl;
+	size_t i, sl;
 
 	i = 0;
 	sl = str_len(s);
@@ -60,10 +82,29 @@ int str_cat(char *s, char *t)
 	return sl + i;
 }
 
+// Concatenates n bytes of t to the end of s and returns the combined length
+size_t str_ncat(char *s, char *t, size_t n)
+{
+	size_t i, sl;
+
+	i = 0;
+	sl = str_len(s);
+
+	while (*t && sl + i < MAXSTR && n > 0) {
+		*(s + sl + i) = *t;
+		++t;
+		++i;
+		--n;
+	}
+	*(s + sl + i) = '\0';
+
+	return sl + i;
+}
+
 // Determines if t occurs at the end of s. Returns 1 if so and 0 otherwise.
 int str_end(char *s, char *t)
 {
-	int i, j, sl, tl;
+	size_t sl, tl;
 
 	sl = str_len(s);
 	tl = str_len(t);
@@ -81,9 +122,28 @@ int str_end(char *s, char *t)
 	return 1;
 }
 
-int str_len(char *s)
+// Compares the first n elements of two strings s and t.
+// Returns -1 if s<t, 0 if s==t, and 1 if s>t.
+int str_ncmp(char *s, char *t, size_t n)
 {
-	int i;
+	int cmp;
+
+	cmp = 0;
+	for (; *s && *t && n > 0 && *s == *t; s++, t++, n--)
+		;
+	if (n) {
+		if (*s < *t)
+			cmp = -1;
+		else if (*s > *t)
+			cmp = 1;
+	}
+
+	return cmp;
+}
+
+size_t str_len(char *s)
+{
+	size_t i;
 
 	i = 0;
 	while (*s) {
