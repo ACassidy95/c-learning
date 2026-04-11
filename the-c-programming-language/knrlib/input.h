@@ -3,9 +3,6 @@
 
 #include <stddef.h>
 
-#define MAXLINELEN	4096
-#define MAXLINES	4096
-
 /* Read character pushed back from ungetch() if one exists,
  * otherwise read character from stdin */
 int	getch(void);

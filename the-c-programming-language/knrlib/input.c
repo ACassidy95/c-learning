@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <stdio.h>
+#include "constant.h"
 #include "input.h"
 
 /* Pushback character for getch/ungetch*/
