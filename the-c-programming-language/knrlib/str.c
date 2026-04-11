@@ -78,5 +78,16 @@ size_t str_ncpy(char *dst, char *src, size_t n)
 /* Reverses s in place. */
 void str_rev(char *s)
 {
+	size_t l, r;
+
+	l = 0;
+	r = str_len(s);
+
+	while (l < r) {
+		swap(char, *(s + l), *(s + r - 1));
+		++l;
+		--r;
+	}
+
 	return;
 }
