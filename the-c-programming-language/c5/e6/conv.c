@@ -1,5 +1,6 @@
 #include <ctype.h>
 #include <limits.h>
+#include <math.h>
 #include <stddef.h>
 #include <stdio.h>
 #include "conv.h"
@@ -41,7 +42,62 @@ int atoi(char *s)
 
 double atof(char *s)
 {
-	return 0;
+	char	*st;
+	double	f, ip, fp;
+	int	esign, vsign, ep;
+
+	st = s;
+	f = ip = fp = 0.0;
+	ep = 0;
+
+	/* Obtain integer part */
+	ip = atoi(st);
+	f += ip;
+
+	vsign = 1;
+	if (ip < 0) {
+		st++;
+		vsign = -1;
+	}
+	while (isspace(*st))
+		st++;
+
+	do {
+		st++;
+	} while ((int)(ip /= 10));
+
+
+	/* Obtain optional decimal part if one exists */
+	if (*st == '.') {
+		while (!isdigit(*++st) && *st != 'e' && *st != 'E')
+			;
+
+		fp = atoi(st);
+
+		while((int)fp) {
+			fp /= 10.0;
+			st++;
+		}
+
+		if (vsign < 0)
+			fp *= vsign;
+		f += fp;
+
+		while (*st == '0')
+			st++;
+	}
+
+	/* Obtain optional scientific notation integer exponent part if one
+	 * exists */
+	if (*st == 'e' || *st == 'E') {
+		while (!isdigit(*++st) && *st != '-')
+			;
+
+		ep = atoi(st);
+		f *= pow(10.0, ep);
+	}
+
+	return f;
 }
 
 int itoa(int n, char *s)

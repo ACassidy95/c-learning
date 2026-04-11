@@ -5,6 +5,7 @@
 int main(void)
 {
 	char	s[MAXLINE], t[MAXLINE];
+	double	dx, dy;
 	int	x, y;
 	size_t  n;
 
@@ -19,6 +20,8 @@ int main(void)
 		if (y >= 0)
 			printf("itoa: %d - %s\n", x, t);
 
+		dx = atof(s);
+		printf("atof: %.3lf - %s", dx, s);
 		printf("> ");
 	}
 
