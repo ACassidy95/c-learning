@@ -68,9 +68,9 @@ size_t str_ncpy(char *dst, char *src, size_t n)
 	size_t	bc;
 
 	for (dp = dst, sp = src, bc = 0;
-	     n && *dp && *sp && *dp = *sp;
+	     n && *dp && *sp;
 	     --n, dp++, sp++, bc++)
-		;
+		*dp = *sp;
 
 	return bc;
 }
