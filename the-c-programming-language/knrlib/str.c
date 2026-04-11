@@ -1,4 +1,4 @@
-#include "constant.h"
+#include "common.h"
 #include "str.h"
 
 /* Writes the contents of src to the end of the contents of dst. If space in the
@@ -64,7 +64,15 @@ int str_ncmp(char *s, char *t, size_t n)
  * written. Returns the number of bytes written. */
 size_t str_ncpy(char *dst, char *src, size_t n)
 {
-	return 0;
+	char	*dp, *sp;
+	size_t	bc;
+
+	for (dp = dst, sp = src, bc = 0;
+	     n && *dp && *sp && *dp = *sp;
+	     --n, dp++, sp++, bc++)
+		;
+
+	return bc;
 }
 
 /* Reverses s in place. */
