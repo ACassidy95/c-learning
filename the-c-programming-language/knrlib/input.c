@@ -1,3 +1,5 @@
+#include <stddef.h>
+#include <stdio.h>
 #include "input.h"
 
 /* Pushback character for getch/ungetch*/
@@ -16,3 +18,13 @@ int getch(void)
 
 	return c;
 }
+
+void ungetch(int c)
+{
+	if (pb != -1)
+		printf("Error - ungetch: Push back failed %c waiting\n", pb);
+	else
+		pb = c;
+	return;
+}
+
