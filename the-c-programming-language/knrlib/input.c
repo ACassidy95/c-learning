@@ -35,7 +35,8 @@ void ungetch(int c)
  * length (excluding null terminator). */
 size_t getln(char *s, size_t max)
 {
-	size_t l;
+	int	c;
+	size_t	l;
 
 	for (l = 0; max > 0 && (c = getch()) != EOF && c != '\n'; ++l, --max)
 		*s++ = c;
