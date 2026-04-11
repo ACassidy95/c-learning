@@ -6,8 +6,10 @@
 int	atoi(char *);
 double	atof(char *);
 
-/* Converts a given integer/floating-point value to string. */
-char*	itoa(int);
-char*	ftoa(double);
+/* Converts a given integer/floating-point value to string, writing to the
+ * provided char * argument. Returns the length of the string on success or 0
+ * on failure. */
+int	itoa(int, char*);
+int	ftoa(double, char*);
 
 #endif
