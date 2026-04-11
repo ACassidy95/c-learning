@@ -4,7 +4,7 @@
 
 int main(void)
 {
-	char	s[MAXLINE], t[MAXLINE];
+	char	s[MAXLINE], t[MAXLINE], u[MAXLINE];
 	double	dx, dy;
 	int	x, y;
 	size_t  n;
@@ -22,6 +22,11 @@ int main(void)
 
 		dx = atof(s);
 		printf("atof: %.3lf - %s", dx, s);
+
+		dy = ftoa(dx, u);
+		if (dy >= 0)
+			printf("ftoa: %.3lf - %s\n", dy, u);
+
 		printf("> ");
 	}
 

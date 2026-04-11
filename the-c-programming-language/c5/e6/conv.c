@@ -134,7 +134,30 @@ int itoa(int n, char *s)
 	return l;
 }
 
+#define TOLERANCE 1e6
+
 int ftoa(double f, char *s)
 {
-	return 0;
+	char	*st;
+	double	ip, fp;
+	int	l, il, fl;
+
+	st = s;
+	l = il = fl = 0;
+
+	ip = f;
+
+	il += itoa((int)ip, st);
+	st += il;
+
+	if (fp) {
+		*st++ = '.';
+		fl = itoa((int)fp, st);
+		st += fl;
+	}
+
+	*st = '\0';
+	l = il + fl;
+
+	return l;
 }
