@@ -9,10 +9,12 @@ size_t	str_ncat(char *, char*, size_t);
 int	str_end(char *, char *);
 size_t	str_len(char*);
 int	str_ncmp(char *, char *, size_t);
+int	str_ncpy(char *, char *, size_t);
 
 char *st1 = "Test string 1";
 char *st2 = "Test string 2";
 char *st3 = "Test string 1";
+char *st4 = "Copy Me!";
 
 int main(void)
 {
@@ -43,6 +45,9 @@ int main(void)
 		       st1, st3, str_ncmp(st1, st3, 5),
 		       st1, st3, str_ncmp(st1, st3, 13),
 		       st1, st3, str_ncmp(st1, st3, 20));
+
+		printf("Ncpy:\nncpy(%s, %s, 5): %d\n",
+		       s, t, str_ncpy(s, t, 5));
 	}
 
 	return 0;
@@ -99,6 +104,20 @@ size_t str_ncat(char *s, char *t, size_t n)
 	*(s + sl + i) = '\0';
 
 	return sl + i;
+}
+
+// Copies the first n bytes of t (or as many as available/possible) into first n
+// bytes of s. Returns 0 if all bytes copied. Returns >0 if fewer than n bytes
+// copied for whatever reason with value being count of leftover bytes, i.e.
+// fewer than n bytes in t, or space restrictions in s.
+int str_ncpy(char *s, char *t, size_t n)
+{
+	while (*s && *t && n > 0) {
+		*s++ = *t++;
+		--n;
+	}
+
+	return n;
 }
 
 // Determines if t occurs at the end of s. Returns 1 if so and 0 otherwise.
