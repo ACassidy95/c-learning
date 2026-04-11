@@ -13,7 +13,8 @@ int	getch(void);
 /* Return character to be re-read by getch */
 void	ungetch(int);
 
-/* Read from stdin until \n encountered or max size reached */
+/* Read from stdin until \n encountered or max size reached and return line
+ * length (excluding null terminator). */
 size_t	getln(char *, size_t);
 
 #endif
