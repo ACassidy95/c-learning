@@ -9,12 +9,17 @@ int atoi(char *s)
 	char	*st;
 	int	n, sign;
 
-	// Swallow whitespace
+	/* Swallow whitespace */
 	for (st = s; isspace(*st); ++st)
 		;
 
-	// Not a number
-	if (!isdigit(*st) && *st != '+' && *st != '-') {
+	/* Not a numerical element. This also gates for decimal points and
+	 * scientific notation marks useful for calls to this function by atof.
+	 * For true integers they are simply ignored. */
+	if (!isdigit(*st)
+	    && *st != '+' && *st != '-'
+	    && *st != '.'
+	    && *st != 'e' && *st != 'E') {
 		printf("Error - atoi: Non-numerical character %c detected in input\n",
 		       *st);
 		return 0;
