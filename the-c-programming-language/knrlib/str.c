@@ -40,7 +40,23 @@ size_t str_len(char *s)
  * or 1 if s > t in lexicographical order. */
 int str_ncmp(char *s, char *t, size_t n)
 {
-	return 0;
+	char	*sp, *tp;
+	int	cmp;
+
+	for (sp = s, tp = t; n && *sp && *tp && *sp == *tp; sp++, tp++, --n)
+		;
+
+	if (*sp && *tp) {
+		if (*sp == *tp) {
+			cmp = 0;
+		} else {
+			cmp = sp < tp ? -1 : 1;
+		}
+	} else if (!(*sp && *tp)){
+		cmp = *(sp - 1) < *(tp - 1) ? -1 : 1;
+	}
+
+	return cmp;
 }
 
 /* Copies the first n bytes of src to the first n bytes of dst. If fewer than n
