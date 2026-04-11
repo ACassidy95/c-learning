@@ -1,3 +1,4 @@
+#include "constant.h"
 #include "str.h"
 
 /* Writes the contents of src to the end of the contents of dst. If space in the
@@ -5,13 +6,34 @@
  * length of the concatenation. */
 size_t str_cat(char *dst, char *src)
 {
-	return 0;
+	char	*dp, *sp;
+	size_t	dl, l;
+
+	dl = str_len(dst);
+	l = dl;
+
+	dp = dst + dl;
+	sp = src;
+
+	while (*src && dp < dst + STRMAX) {
+		*dp++ = *src++;
+		++l;
+	}
+	*dp = '\0';
+
+	return l;
 }
 
 /* Returns the length of s minus the null-terminator */
 size_t str_len(char *s)
 {
-	return 0;
+	char *sp;
+	size_t l;
+
+	for (sp = s, l = 0; *sp; sp++, l++)
+		;
+
+	return l;
 }
 
 /* Compares the first n bytes of s, t. Returns 0 if s == t, -1 if s < t,
