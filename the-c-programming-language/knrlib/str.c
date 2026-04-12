@@ -14,13 +14,13 @@ size_t str_cat(char *dst, char *src)
 	dp = dst + dl;
 	sp = src;
 
-	while (*src && dp < dst + STRMAX) {
-		*dp++ = *src++;
+	while (*sp && dp < dst + STRMAX) {
+		*dp++ = *sp++;
 		++dl;
 	}
 	*dp = '\0';
 
-	return l;
+	return dl;
 }
 
 /* Returns the length of s minus the null-terminator */
