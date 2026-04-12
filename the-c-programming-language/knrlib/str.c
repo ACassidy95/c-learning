@@ -7,17 +7,16 @@
 size_t str_cat(char *dst, char *src)
 {
 	char	*dp, *sp;
-	size_t	dl, l;
+	size_t	dl;
 
 	dl = str_len(dst);
-	l = dl;
 
 	dp = dst + dl;
 	sp = src;
 
 	while (*src && dp < dst + STRMAX) {
 		*dp++ = *src++;
-		++l;
+		++dl;
 	}
 	*dp = '\0';
 
